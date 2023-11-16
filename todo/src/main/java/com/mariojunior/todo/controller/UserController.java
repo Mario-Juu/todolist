@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
+    @GetMapping("/")
     public List<User> findAll(){
         return userService.findAll();
     }

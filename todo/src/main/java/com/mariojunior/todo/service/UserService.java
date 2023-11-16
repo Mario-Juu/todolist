@@ -1,5 +1,7 @@
 package com.mariojunior.todo.service;
 
+import com.mariojunior.todo.controller.TaskController;
+import com.mariojunior.todo.domain.Task;
 import com.mariojunior.todo.domain.User;
 import com.mariojunior.todo.exception.ResourceNotFoundException;
 import com.mariojunior.todo.repository.TaskRepository;
@@ -37,6 +39,7 @@ public class UserService {
         }
         return user;
     }
+
 
     public Optional<User> deleteById(Long id){
         Optional<User> deletedUser = userRepository.findById(id);

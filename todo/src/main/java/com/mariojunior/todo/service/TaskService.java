@@ -4,6 +4,7 @@ import com.mariojunior.todo.domain.Task;
 import com.mariojunior.todo.domain.User;
 import com.mariojunior.todo.exception.ResourceNotFoundException;
 import com.mariojunior.todo.repository.TaskRepository;
+import com.mariojunior.todo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ public class TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<Task> findAll(){
         return taskRepository.findAll();
@@ -48,5 +52,6 @@ public class TaskService {
         }
         return deletedTask;
     }
+
 
 }

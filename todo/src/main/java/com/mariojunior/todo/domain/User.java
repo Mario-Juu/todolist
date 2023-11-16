@@ -1,5 +1,6 @@
 package com.mariojunior.todo.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference //Diz que esse é o lado "um" da relação
     private List<Task> tasks = new ArrayList<Task>();
 
 }
