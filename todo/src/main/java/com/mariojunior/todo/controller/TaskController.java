@@ -1,7 +1,8 @@
 package com.mariojunior.todo.controller;
 
 import com.mariojunior.todo.domain.Task;
-import com.mariojunior.todo.exception.ResourceNotFoundException;
+import com.mariojunior.todo.service.exception.DataBindingViolationException;
+import com.mariojunior.todo.service.exception.ResourceNotFoundException;
 import com.mariojunior.todo.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private UserController userController;
+
     @GetMapping("/")
     public List<Task> findAll(){
         return taskService.findAll();
@@ -30,6 +34,12 @@ public class TaskController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task não encontrada", e);
         }
     }
+
+    @GetMapping("/users/{userId}")
+    public List<Task> findAllByUserId(@PathVariable Long userId){
+        userController.findById(userId);
+        return this.taskService.findAllByUserId(userId);
+    }
     @PostMapping("/")
     public Optional<Task> addTask(@RequestBody Task task){
         return Optional.of(taskService.addTask(task));
@@ -41,7 +51,7 @@ public class TaskController {
             return taskService.deleteById(id);
         } catch (ResourceNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task não encontrada", e);
-        } catch(RuntimeException e){
+        } catch(DataBindingViolationException e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Não foi possível deletar a task pois há um usuário associado.", e);
         }
     }

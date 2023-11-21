@@ -1,8 +1,8 @@
 package com.mariojunior.todo.service;
 
 import com.mariojunior.todo.domain.Task;
-import com.mariojunior.todo.domain.User;
-import com.mariojunior.todo.exception.ResourceNotFoundException;
+import com.mariojunior.todo.service.exception.DataBindingViolationException;
+import com.mariojunior.todo.service.exception.ResourceNotFoundException;
 import com.mariojunior.todo.repository.TaskRepository;
 import com.mariojunior.todo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +40,10 @@ public class TaskService {
         return task;
     }
 
+    public List<Task> findAllByUserId(Long userId){
+        return taskRepository.findByUser_Id(userId);
+    }
+
     public Optional<Task> deleteById(Long id){
         Optional<Task> deletedTask = taskRepository.findById(id);
         if(deletedTask.isEmpty()){
@@ -48,7 +52,7 @@ public class TaskService {
         try{
             taskRepository.delete(deletedTask.get());
         } catch (Exception e){
-            throw new RuntimeException("Não foi possível deletar o usuário pois há uma tarefa associada.");
+            throw new DataBindingViolationException("Não foi possível deletar o usuário pois há uma tarefa associada.");
         }
         return deletedTask;
     }
