@@ -5,6 +5,7 @@ import com.mariojunior.todo.exception.ResourceNotFoundException;
 import com.mariojunior.todo.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,6 +17,9 @@ import java.util.Optional;
 public class TaskController {
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private UserController userController;
 
     @GetMapping("/")
     public List<Task> findAll(){
@@ -29,6 +33,12 @@ public class TaskController {
         } catch(ResourceNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task não encontrada", e);
         }
+    }
+
+    @GetMapping("/users/{userId}")
+    public List<Task> findAllByUserId(@PathVariable Long userId){
+        userController.findById(userId);
+        return this.taskService.findAllByUserId(userId);
     }
     @PostMapping("/")
     public Optional<Task> addTask(@RequestBody Task task){

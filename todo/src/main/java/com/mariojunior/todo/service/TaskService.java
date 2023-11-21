@@ -40,6 +40,10 @@ public class TaskService {
         return task;
     }
 
+    public List<Task> findAllByUserId(Long userId){
+        return taskRepository.findByUser_Id(userId);
+    }
+
     public Optional<Task> deleteById(Long id){
         Optional<Task> deletedTask = taskRepository.findById(id);
         if(deletedTask.isEmpty()){

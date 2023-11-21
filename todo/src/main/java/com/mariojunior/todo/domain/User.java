@@ -1,5 +1,6 @@
 package com.mariojunior.todo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -9,11 +10,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -23,6 +25,7 @@ public class User {
 
 
     @Column(nullable = false, length = 100, unique = true)
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //Nunca retornar a senha para o usuário.
@@ -30,7 +33,9 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference //Diz que esse é o lado "um" da relação
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Task> tasks = new ArrayList<Task>();
+
+
 
 }
