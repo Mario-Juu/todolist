@@ -1,4 +1,4 @@
-package com.mariojunior.todo.exception;
+package com.mariojunior.todo.service.exception;
 
 public class ResourceNotFoundException extends RuntimeException{
 }

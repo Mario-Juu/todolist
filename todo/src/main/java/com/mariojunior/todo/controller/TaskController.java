@@ -1,11 +1,11 @@
 package com.mariojunior.todo.controller;
 
 import com.mariojunior.todo.domain.Task;
-import com.mariojunior.todo.exception.ResourceNotFoundException;
+import com.mariojunior.todo.service.exception.DataBindingViolationException;
+import com.mariojunior.todo.service.exception.ResourceNotFoundException;
 import com.mariojunior.todo.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -51,7 +51,7 @@ public class TaskController {
             return taskService.deleteById(id);
         } catch (ResourceNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task não encontrada", e);
-        } catch(RuntimeException e){
+        } catch(DataBindingViolationException e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Não foi possível deletar a task pois há um usuário associado.", e);
         }
     }

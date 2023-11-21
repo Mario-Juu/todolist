@@ -1,7 +1,8 @@
 package com.mariojunior.todo.controller;
 
 import com.mariojunior.todo.domain.User;
-import com.mariojunior.todo.exception.ResourceNotFoundException;
+import com.mariojunior.todo.service.exception.DataBindingViolationException;
+import com.mariojunior.todo.service.exception.ResourceNotFoundException;
 import com.mariojunior.todo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,7 @@ public class UserController {
             return userService.deleteById(id);
         } catch (ResourceNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado", e);
-        } catch(RuntimeException e){
+        } catch(DataBindingViolationException e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Não foi possível deletar o usuário pois há uma tarefa associada.", e);
         }
     }
