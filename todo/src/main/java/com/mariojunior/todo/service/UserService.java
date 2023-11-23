@@ -1,18 +1,25 @@
 package com.mariojunior.todo.service;
 
 import com.mariojunior.todo.domain.User;
+import com.mariojunior.todo.domain.enums.ProfileEnums;
 import com.mariojunior.todo.service.exception.DataBindingViolationException;
 import com.mariojunior.todo.service.exception.ResourceNotFoundException;
 import com.mariojunior.todo.repository.TaskRepository;
 import com.mariojunior.todo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
    private UserRepository userRepository;
@@ -24,11 +31,15 @@ public class UserService {
     }
 
     public User addUser(User user){
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setProfiles(Stream.of(ProfileEnums.USER.getCode()).collect(Collectors.toSet()));
         return userRepository.save(user);
     }
 
     public User updateUser(User user){
-        return userRepository.save(user);
+        User updatedUser = userRepository.findById(user.getId()).get();
+        updatedUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        return userRepository.save(updatedUser);
     }
 
     public Optional<User> findById(Long id){
