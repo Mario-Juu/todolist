@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/tasks/users/1"
+const url = "http://localhost:8080/tasks/users/"
 
 function hideloader(){
     document.getElementById("loading").style.display="none";
