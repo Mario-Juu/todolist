@@ -36,9 +36,8 @@ public class TaskController {
     }
 
     @GetMapping("/users/{userId}")
-    public List<Task> findAllByUserId(@PathVariable Long userId){
-        userController.findById(userId);
-        return this.taskService.findAllByUserId(userId);
+    public List<Task> findAllByUser(){
+        return this.taskService.findAllByUser();
     }
     @PostMapping("/")
     public Optional<Task> addTask(@RequestBody Task task){

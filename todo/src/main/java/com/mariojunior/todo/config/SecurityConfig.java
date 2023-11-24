@@ -1,6 +1,9 @@
 package com.mariojunior.todo.config;
 
+import com.mariojunior.todo.security.JWTAuthenticationFilter;
+import com.mariojunior.todo.security.JWTAuthorizationFilter;
 import com.mariojunior.todo.security.JWTUtil;
+import com.mariojunior.todo.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +16,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -57,8 +59,13 @@ public class SecurityConfig {
         http.authorizeHttpRequests(request -> {
             request.requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll();
             request.requestMatchers(PUBLIC_MATCHERS).permitAll();
-            request.anyRequest().authenticated();
+            request.anyRequest().authenticated().and().authenticationManager(authenticationManager);
+
         });
+
+        http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(this.authenticationManager, jwtUtil, userDetailsService));
+
 
 
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
