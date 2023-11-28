@@ -18,6 +18,10 @@ public class ErrorResponse {
     private List<ValidationErrors> errors;
     private String stackTrace;
 
+    public String toJson() {
+        return "{\"status\": " + getStatus() + ", " +
+                "\"message\": \"" + getMessage() + "\"}";
+    }
 
 
     @Data

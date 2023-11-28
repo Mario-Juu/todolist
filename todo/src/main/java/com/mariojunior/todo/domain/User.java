@@ -3,14 +3,14 @@ package com.mariojunior.todo.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mariojunior.todo.domain.enums.ProfileEnums;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -36,6 +36,17 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Task> tasks = new ArrayList<Task>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @CollectionTable(name = "user_profile")
+    @Column(name = "profile_id", nullable = false)
+    private Set<Integer> profiles = new HashSet<>();
 
+    public Set<ProfileEnums> getProfiles(){
+        return profiles.stream().map(x -> ProfileEnums.toEnum(x)).collect(Collectors.toSet());
+    }
 
+    public void addProfile(ProfileEnums profileEnums){
+        profiles.add(profileEnums.getCode());
+    }
 }

@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/tasks/users/1"
+const url = "http://localhost:8080/tasks/users/"
 
 function hideloader(){
     document.getElementById("loading").style.display="none";
@@ -17,8 +17,8 @@ function show(tasks){
         <tr>
         <th>${task.id}</th>
         <td>${task.description}</td>
-        <td>${task.user ? task.user.username : 'N/A'}</td>
-        <td>${task.user ? task.user.id : 'N/A'}</td>
+        <td>${task.user}</td>
+        <td>${task.user}</td>
         </tr>`
     }
     document.getElementById("tasks").innerHTML = tab;
