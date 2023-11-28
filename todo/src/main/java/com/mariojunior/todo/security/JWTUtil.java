@@ -39,7 +39,7 @@ public class JWTUtil {
         return false;
     }
 
-    private Claims getClaims(String token){
+    private Claims getClaims(String token) { //Claims = validar o token com a secret key
         SecretKey secretKey = getKeyBySecret();
         try{
             return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();

@@ -37,9 +37,6 @@ public class SecurityConfig {
     @Autowired
     private JWTUtil jwtUtil;
 
-    private static final String[] PUBLIC_MATCHERS = {
-            "/"
-    };
     private static final String[] PUBLIC_MATCHERS_POST = {
             "/users/",
             "/login"
@@ -56,17 +53,14 @@ public class SecurityConfig {
 
         this.authenticationManager = authenticationManagerBuilder.build();
 
-        http.authorizeHttpRequests(request -> {
-            request.requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll();
-            request.requestMatchers(PUBLIC_MATCHERS).permitAll();
-            request.anyRequest().authenticated().and().authenticationManager(authenticationManager);
-
-        });
-
         http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, jwtUtil));
         http.addFilter(new JWTAuthorizationFilter(this.authenticationManager, jwtUtil, userDetailsService));
 
+        http.authorizeHttpRequests(request -> {
+            request.requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll();
+            request.anyRequest().authenticated().and().authenticationManager(authenticationManager);
 
+        });
 
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
