@@ -42,6 +42,11 @@ public class SecurityConfig {
             "/login"
     };
 
+    private static final String[] AUTH_WHITELIST ={
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -53,14 +58,17 @@ public class SecurityConfig {
 
         this.authenticationManager = authenticationManagerBuilder.build();
 
-        http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, jwtUtil));
-        http.addFilter(new JWTAuthorizationFilter(this.authenticationManager, jwtUtil, userDetailsService));
+
 
         http.authorizeHttpRequests(request -> {
+            request.requestMatchers(AUTH_WHITELIST).permitAll();
             request.requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll();
             request.anyRequest().authenticated().and().authenticationManager(authenticationManager);
 
         });
+
+        http.addFilter(new JWTAuthorizationFilter(this.authenticationManager, jwtUtil, userDetailsService));
+        http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, jwtUtil));
 
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
