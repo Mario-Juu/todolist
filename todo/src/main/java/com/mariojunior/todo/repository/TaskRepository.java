@@ -10,4 +10,6 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findByUser_Id(Long id);
+
+    List<Task> findAllById(Long id);
 }

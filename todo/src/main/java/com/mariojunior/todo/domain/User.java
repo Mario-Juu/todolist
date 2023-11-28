@@ -1,7 +1,5 @@
 package com.mariojunior.todo.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mariojunior.todo.domain.enums.ProfileEnums;
 import jakarta.persistence.*;

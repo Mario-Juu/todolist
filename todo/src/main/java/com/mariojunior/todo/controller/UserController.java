@@ -1,6 +1,7 @@
 package com.mariojunior.todo.controller;
 
 import com.mariojunior.todo.domain.User;
+import com.mariojunior.todo.security.UserSpringSecurity;
 import com.mariojunior.todo.service.exception.DataBindingViolationException;
 import com.mariojunior.todo.service.exception.ResourceNotFoundException;
 import com.mariojunior.todo.service.UserService;
@@ -10,7 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import static com.mariojunior.todo.service.UserService.authenticated;
 
 @RestController
 @RequestMapping("/users")
@@ -19,15 +23,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public List<User> findAll(){
         return userService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public Optional<User> findById(@PathVariable Long id){
+    @GetMapping("/")
+    public Optional<User> findById(){
         try{
-            return userService.findById(id);
+            UserSpringSecurity userSpringSecurity = authenticated();
+            return userService.findById(Objects.requireNonNull(userSpringSecurity).getId());
         } catch(ResourceNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado", e);
         }

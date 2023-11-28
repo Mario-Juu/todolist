@@ -35,10 +35,7 @@ public class TaskController {
         }
     }
 
-    @GetMapping("/users/{userId}")
-    public List<Task> findAllByUser(){
-        return this.taskService.findAllByUser();
-    }
+
     @PostMapping("/")
     public Optional<Task> addTask(@RequestBody Task task){
         return Optional.of(taskService.addTask(task));

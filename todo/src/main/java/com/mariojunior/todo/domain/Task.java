@@ -22,6 +22,7 @@ public class Task {
 
     @ManyToOne //Um usuário pode ter várias tarefas
     @JoinColumn(name = "user_id", nullable = false, updatable = false) //Obrigatório ter um usuário
+    @JsonIgnoreProperties
     private User user;
 
     @Column(nullable = false)

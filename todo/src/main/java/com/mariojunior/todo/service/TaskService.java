@@ -32,7 +32,7 @@ public class TaskService {
     public List<Task> findAll(){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
         if(!userSpringSecurity.hasRole(ProfileEnums.ADMIN))
-            throw new AuthorizationException("Acesso negado!");
+            return taskRepository.findAllById(userSpringSecurity.getId());
         return taskRepository.findAll();
     }
 
@@ -40,7 +40,6 @@ public class TaskService {
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
         if(Objects.isNull(userSpringSecurity))
             throw new AuthorizationException("Acesso negado!");
-        System.out.println("Passou");
         Optional<User> user = userService.findById(userSpringSecurity.getId());
         task.setId(null);
         task.setUser(user.get());
@@ -62,13 +61,6 @@ public class TaskService {
         if(Objects.isNull(userSpringSecurity) || !userSpringSecurity.hasRole(ProfileEnums.ADMIN) && !userHasTask(userSpringSecurity, task.get()))
             throw new AuthorizationException("Acesso negado!");
         return task;
-    }
-
-    public List<Task> findAllByUser(){
-        UserSpringSecurity userSpringSecurity = UserService.authenticated();
-        if(Objects.isNull(userSpringSecurity))
-            throw new AuthorizationException("Acesso negado!");
-        return taskRepository.findByUser_Id(userSpringSecurity.getId());
     }
 
     public Optional<Task> deleteById(Long id){

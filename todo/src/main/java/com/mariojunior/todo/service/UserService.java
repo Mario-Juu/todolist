@@ -27,8 +27,7 @@ public class UserService {
 
     @Autowired
    private UserRepository userRepository;
-    @Autowired
-   private TaskRepository taskRepository;
+
 
     public List<User> findAll(){
         UserSpringSecurity userSpringSecurity = authenticated();
