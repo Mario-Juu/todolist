@@ -1,4 +1,4 @@
-###  Projeto PicPay Simplificado API
+###  Projeto ToDo List API
 ## Descrição
 Uma aplicação web onde é criado uma ToDo List API com um view, o projeto conta com uma estrutura CRUD e comunicações via arquitetura REST. Conta com autorização e autenticação de usuários via SpringSecurity.
 
